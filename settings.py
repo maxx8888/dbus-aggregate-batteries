@@ -37,7 +37,7 @@ CHARGE_SAVE_PRECISION = 0.0025                          # Trade-off between save
 ##### Charge/Discharge parameters #####
 #######################################
 
-# Please note: Victron EES disables CCL if DC-coupled PV feed-in is active
+# Please note: Victron ESS disables CCL if DC-coupled PV feed-in is active
 
 OWN_CHARGE_PARAMETERS = True                            # Calculate own charge/discharge control parameters (True) from following settings
                                                         # or use them from battery driver (False)
