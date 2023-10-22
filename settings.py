@@ -41,7 +41,6 @@ CHARGE_SAVE_PRECISION = 0.0025                          # Trade-off between save
 
 OWN_CHARGE_PARAMETERS = True                            # Calculate own charge/discharge control parameters (True) from following settings
 USE_MAX_CVL = False                                     # Use the highest requested charge Voltage from all Packs. If False lowest Voltage will be used (Balance all Packs, Balance only fastest Pack) 
-                                                        # or use them from battery driver (False)
 CHARGE_VOLTAGE = 2.3                                    # Constant voltage charge = this value * nr. of cells
 BALANCING_VOLTAGE = 2.45                                # This voltage per cell will be set periodically and kept until balancing below CELL_DIFF_MAX and next charge cycle
 BALANCING_REPETITION = 10                               # in days                      
