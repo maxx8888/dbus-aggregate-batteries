@@ -473,7 +473,6 @@ class DbusAggBatService(object):
         VoltagesSum = sum(VoltagesSum_dict.values()) / NR_OF_BATTERIES                      # Marvo2011
         TimeToGo = TimeToGo / NR_OF_BATTERIES        
 
-
         if not OWN_SOC:                                                                     # only if needed
             Soc = Soc / Capacity                                                            # weighted sum
         
