@@ -111,6 +111,7 @@ class DbusAggBatService(object):
         self._dbusservice.add_path('/System/NrOfModulesBlockingDischarge', None, writeable=True)
         self._dbusservice.add_path('/Voltages/Sum', None, writeable=True, gettextcallback=lambda a, x: "{:.3f}V".format(x))
         self._dbusservice.add_path('/Voltages/Diff', None, writeable=True, gettextcallback=lambda a, x: "{:.3f}V".format(x)) # do do
+        self._dbusservice.add_path('/TimeToGo', None, writeable=True)
         
         # Create alarm paths
         self._dbusservice.add_path('/Alarms/LowVoltage', None, writeable=True)
@@ -326,6 +327,7 @@ class DbusAggBatService(object):
         Capacity = 0
         InstalledCapacity = 0
         ConsumedAmphours = 0        
+        TimeToGo = 0
         
         # Temperature
         Temperature = 0
@@ -385,6 +387,9 @@ class DbusAggBatService(object):
                     ConsumedAmphours += self._dbusMon.dbusmon.get_value(self._batteries_dict[i], '/ConsumedAmphours')                                       # sum of consumed Ah capacities
                     Capacity += self._dbusMon.dbusmon.get_value(self._batteries_dict[i], '/Capacity')                                                       # sum of Ah capacities
                     Soc += self._dbusMon.dbusmon.get_value(self._batteries_dict[i], '/Soc') * self._dbusMon.dbusmon.get_value(self._batteries_dict[i], '/Capacity') # weight sum for average Soc
+
+                if self._dbusMon.dbusmon.get_value(self._batteries_dict[i], '/TimeToGo') is not None:
+                    TimeToGo += self._dbusMon.dbusmon.get_value(self._batteries_dict[i], '/TimeToGo')                                                	    # sum for average TimeToGo
                 
                 # Temperature
                 Temperature += self._dbusMon.dbusmon.get_value(self._batteries_dict[i], '/Dc/0/Temperature')                                                # sum for average temperature
@@ -397,7 +402,8 @@ class DbusAggBatService(object):
                 MinCellVoltage_dict['%s_%s' % (BatteryName, self._dbusMon.dbusmon.get_value(self._batteries_dict[i], '/System/MinVoltageCellId'))]\
                 = self._dbusMon.dbusmon.get_value(self._batteries_dict[i], '/System/MinCellVoltage')                                                        # append dictionary by the cell ID and its max. voltage
                 VoltagesSum_dict[i] = self._dbusMon.dbusmon.get_value(self._batteries_dict[i], '/Voltages/Sum')                                             # Marvo2011
-                    
+
+
                 # Battery state                
                 NrOfModulesOnline += self._dbusMon.dbusmon.get_value(self._batteries_dict[i], '/System/NrOfModulesOnline')                                  # sum of modules online
                 NrOfModulesOffline += self._dbusMon.dbusmon.get_value(self._batteries_dict[i], '/System/NrOfModulesOffline')                                # sum of modules offline
@@ -465,7 +471,9 @@ class DbusAggBatService(object):
         Voltage = Voltage / NR_OF_BATTERIES
         Temperature = Temperature / NR_OF_BATTERIES
         VoltagesSum = sum(VoltagesSum_dict.values()) / NR_OF_BATTERIES                      # Marvo2011
-        
+        TimeToGo = TimeToGo / NR_OF_BATTERIES        
+
+
         if not OWN_SOC:                                                                     # only if needed
             Soc = Soc / Capacity                                                            # weighted sum
         
@@ -494,6 +502,7 @@ class DbusAggBatService(object):
 	    	MaxChargeVoltage = self._fn._min(MaxChargeVoltage_list)
 	    else
 		MaxChargeVoltage = self._fn._max(MaxChargeVoltage_list)
+		    
             MaxChargeCurrent = self._fn._min(MaxChargeCurrent_list) * NR_OF_BATTERIES
             MaxDischargeCurrent = self._fn._min(MaxDischargeCurrent_list) * NR_OF_BATTERIES
         
@@ -651,6 +660,7 @@ class DbusAggBatService(object):
             bus['/Capacity'] = Capacity
             bus['/InstalledCapacity'] = InstalledCapacity
             bus['/ConsumedAmphours'] = ConsumedAmphours
+            bus['/TimeToGo'] = TimeToGo
         
             # send temperature
             bus['/Dc/0/Temperature'] = Temperature
