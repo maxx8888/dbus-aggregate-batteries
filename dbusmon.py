@@ -26,7 +26,8 @@ class DbusMon:
             '/ConsumedAmphours': dummy,
             '/Capacity': dummy,
             '/Soc': dummy,
-
+            '/TimeToGo': dummy,
+		
 			'/Dc/0/Temperature': dummy,
             '/System/MaxCellTemperature': dummy,
             '/System/MinCellTemperature': dummy,
