@@ -4,7 +4,7 @@
 
 # Nr. of physical batteries to be aggregated. Smart shunt for battery current is not needed and not supported.
 NR_OF_BATTERIES = 2
-NR_OF_CELLS_PER_BATTERY = 22
+NR_OF_CELLS_PER_BATTERY = 18
 # Nr. of MPPTs
 NR_OF_MPPTS = 1
 # If DC loads with Smart Shunt present, can be used for total current measurement
@@ -46,11 +46,11 @@ CURRENT_FROM_VICTRON = True
 # Necessary for JK BMS due to poor precision.
 
 # If True, the self calculated charge indicators are taken instead of BMS
-OWN_SOC = True
+OWN_SOC = False
 # Allow zeroing charge counter at MIN_CELL_VOLTAGE. At full battery it is always set to 100%.
 ZERO_SOC = True
 # Trade-off between save precision and file access frequency
-CHARGE_SAVE_PRECISION = 0.0025
+CHARGE_SAVE_PRECISION = 0.0100
 
 # ######################################
 # #### Charge/Discharge parameters #####
@@ -60,36 +60,36 @@ CHARGE_SAVE_PRECISION = 0.0025
 # This program disables the DC-coupled PV feed-in when necessary.
 
 # Calculate own charge/discharge control parameters (True) from following settings
-OWN_CHARGE_PARAMETERS = True
+OWN_CHARGE_PARAMETERS = False
 # or use them from battery driver (False)
 
 # This voltage per cell will be set periodically and kept until balancing below CELL_DIFF_MAX and next charge cycle
-BALANCING_VOLTAGE = 2.5
+BALANCING_VOLTAGE = 3.45
 # in days
 BALANCING_REPETITION = 10
 
 # Set up how full the battery has to be charged in given month
 CHARGE_VOLTAGE_LIST = [
-    2.45,  # January
-    2.45,  # February
-    2.42,  # March
-    2.42,  # April
-    2.40,  # May
-    2.40,  # June
-    2.40,  # July
-    2.40,  # August
-    2.42,  # September
-    2.42,  # October
-    2.45,  # November
-    2.45,  # December
+    3.45,  # January
+    3.45,  # February
+    3.45,  # March
+    3.45,  # April
+    3.45,  # May
+    3.45,  # June
+    3.45,  # July
+    3.45,  # August
+    3.45,  # September
+    3.45,  # October
+    3.45,  # November
+    3.45,  # December
 ]
 
 # If reached by 1-st cell, the CVL is dynamically limited. DC-coupled PV feed-in will be disabled to enable the CCL.
-MAX_CELL_VOLTAGE = 2.55
+MAX_CELL_VOLTAGE = 3.50
 # If reached, discharge current set to zero
-MIN_CELL_VOLTAGE = 1.9
+MIN_CELL_VOLTAGE = 3.0
 # Allow discharge above MIN_CELL_VOLTAGE + MIN_CELL_HYSTERESIS
-MIN_CELL_HYSTERESIS = 0.1
+MIN_CELL_HYSTERESIS = 0.05
 # If lower: re-enable DC-coupled PV feed in (if was disabled by dynamic CVL reduction and was enabled before);
 # go back from BALANCING_VOLTAGE to CHARGE_VOLTAGE
 CELL_DIFF_MAX = 0.015
@@ -97,9 +97,9 @@ CELL_DIFF_MAX = 0.015
 BATTERY_EFFICIENCY = 0.985
 
 # Max. charge current at normal conditions
-MAX_CHARGE_CURRENT = 200
+MAX_CHARGE_CURRENT = 210
 # Max. discharge current at normal conditions
-MAX_DISCHARGE_CURRENT = 200
+MAX_DISCHARGE_CURRENT = 210
 
 # settings limiting charge and discharge current if at least one cell gets full or empty
 # the lists may have any length, but the same length for voltage and current
@@ -119,7 +119,7 @@ CELL_DISCHARGE_LIMITING_VOLTAGE = [
     MIN_CELL_VOLTAGE + 0.1,
     MIN_CELL_VOLTAGE + 0.2,
 ]
-CELL_DISCHARGE_LIMITED_CURRENT = [0, 0.05, 1]
+CELL_DISCHARGE_LIMITED_CURRENT = [0, 0.5, 1]
 
 # #######################################
 # ## if OWN_CHARGE_PARAMETERS = False ###
@@ -140,6 +140,6 @@ KEEP_MAX_CVL = False
 # 0: Disable Cell Info in dbus, 1: Format: /Cell/BatteryName_Cell<ID>
 SEND_CELL_VOLTAGES = 0
 # 0: no logging, 1: print to console, 2: print to file
-LOGGING = 2
+LOGGING = 0
 # in seconds; if 0, periodic logging is disabled
-LOG_PERIOD = 300
+LOG_PERIOD = 900
