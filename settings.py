@@ -131,7 +131,7 @@ CELL_DISCHARGE_LIMITED_CURRENT = [0, 0.5, 1]
 # and correct settings of the SerialBattery driver. Set "True" only if you know exactly
 # what you are doing. If not sure, keep it at "False".
 
-KEEP_MAX_CVL = False
+KEEP_MAX_CVL = True
 
 # ######################################
 # ###### Logging and reporting #########
