@@ -869,7 +869,10 @@ class DbusAggBatService(object):
 
         # find max. charge voltage (if needed)
         if not settings.OWN_CHARGE_PARAMETERS:
-            MaxChargeVoltage = self._fn._min(MaxChargeVoltage_list)  # add KEEP_MAX_CVL
+            if settings.KEEP_MAX_CVL:
+                MaxChargeVoltage = self._fn._max(MaxChargeVoltage_list)
+            else:
+                MaxChargeVoltage = self._fn._min(MaxChargeVoltage_list)
             MaxChargeCurrent = (
                 self._fn._min(MaxChargeCurrent_list) * settings.NR_OF_BATTERIES
             )
