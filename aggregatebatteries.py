@@ -568,10 +568,18 @@ class DbusAggBatService(object):
         MaxChargeVoltage_list = (
             []
         )  # if some cells are above MAX_CELL_VOLTAGE, store here the sum of differences for each battery
+
+        MaxBulkChargeVoltage_list = (
+            []
+        ) # save MaxChargeVoltage of all Batteries still in Bulk Mode. If they are already in Float, their cell Difference is almost 0, means no Issue to have max. Voltage Level. No Cell will peak
+
+        AtLeastOnePackInBulk = false
+                
         AllowToCharge_list = []  # minimum of all to be transmitted
         AllowToDischarge_list = []  # minimum of all to be transmitted
         AllowToBalance_list = []  # minimum of all to be transmitted
         ChargeMode_list = []  # Bulk, Absorption, Float, Keep always max voltage
+        Char
 
         ####################################################
         # Get DBus values from all SerialBattery instances #
@@ -791,6 +799,13 @@ class DbusAggBatService(object):
                             self._batteries_dict[i], "/Info/MaxChargeVoltage"
                         )
                     )  # list of max. charge voltages  to find minimum
+                    if (self._dbusMon.dbusmon.get_value(self._batteries_dict[i], "/Info/ChargeMode").startswith('Bulk'):
+                        MaxBulkChargeVoltage_list.append(
+                            self._dbusMon.dbusmon.get_value(
+                                self._batteries_dict[i], "/Info/MaxChargeVoltage"
+                            )
+                        )  # list of max. charge voltages  to find minimum
+                        AtLeastOnePackInBulk = true
                     ChargeMode_list.append(
                         self._dbusMon.dbusmon.get_value(
                             self._batteries_dict[i], "/Info/ChargeMode"
@@ -870,7 +885,10 @@ class DbusAggBatService(object):
         # find max. charge voltage (if needed)
         if not settings.OWN_CHARGE_PARAMETERS:
             if settings.KEEP_MAX_CVL:
-                MaxChargeVoltage = self._fn._max(MaxChargeVoltage_list)
+                if AtLeastOnePackInBulk == true:
+                    MaxChargeVoltage = self._fn._min(MaxBulkChargeVoltage_list)
+                else:
+                    MaxChargeVoltage = self._fn._min(MaxChargeVoltage_list)
             else:
                 MaxChargeVoltage = self._fn._min(MaxChargeVoltage_list)
             MaxChargeCurrent = (
