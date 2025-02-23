@@ -798,7 +798,7 @@ class DbusAggBatService(object):
                             self._batteries_dict[i], "/Info/MaxChargeVoltage"
                         )
                     )  # list of max. charge voltages  to find minimum
-                    if self._dbusMon.dbusmon.get_value(self._batteries_dict[i], "/Info/ChargeMode").startswith('Bulk') || self._dbusMon.dbusmon.get_value(self._batteries_dict[i], "/Info/ChargeMode").startswith('Absorp'):
+                    if self._dbusMon.dbusmon.get_value(self._batteries_dict[i], "/Info/ChargeMode").startswith('Bulk') or self._dbusMon.dbusmon.get_value(self._batteries_dict[i], "/Info/ChargeMode").startswith('Absorp'):
                         MaxBulkChargeVoltage_list.append(
                             self._dbusMon.dbusmon.get_value(
                                 self._batteries_dict[i], "/Info/MaxChargeVoltage"
